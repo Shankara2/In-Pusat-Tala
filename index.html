@@ -1,0 +1,898 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portal Dashboard & Informasi | MAN Insan Cendekia Tanah Laut</title>
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <!-- Mobile Top Header (Visible on Mobile Only) -->
+    <div class="mobile-header">
+        <a href="#" class="logo">
+            <i class="fa-solid fa-graduation-cap logo-icon"></i>
+            MAN <span class="text-primary">ICT</span>
+        </a>
+        <button class="mobile-menu-btn" id="menuBtn">
+            <i class="fa-solid fa-bars"></i>
+        </button>
+    </div>
+
+    <!-- Sidebar Taskbar (Left Sidebar Navigation - Visible Post-Login Only) -->
+    <aside class="sidebar-taskbar" id="sidebar" style="display: none;">
+        <div class="sidebar-brand">
+            <div class="brand-wrapper">
+                <a href="#" class="logo">
+                    <i class="fa-solid fa-graduation-cap logo-icon"></i>
+                    <span class="brand-text">MAN <span class="text-primary">ICT</span></span>
+                </a>
+                <button class="sidebar-toggle-btn" id="sidebarToggleBtn" title="Buka / Tutup Taskbar">
+                    <i class="fa-solid fa-bars"></i>
+                </button>
+            </div>
+            <span class="portal-badge">PORTAL DIGITAL</span>
+        </div>
+
+        <nav class="sidebar-nav">
+            <ul class="nav-links" id="navLinks">
+                <li>
+                    <a href="#pengumuman" class="active" data-tab="pengumuman" title="Pengumuman">
+                        <i class="fa-solid fa-bullhorn nav-icon"></i>
+                        <span>Pengumuman</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#akademik" data-tab="akademik" title="Akademik">
+                        <i class="fa-solid fa-graduation-cap nav-icon"></i>
+                        <span>Akademik</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#galeri" data-tab="galeri" title="Galeri">
+                        <i class="fa-solid fa-images nav-icon"></i>
+                        <span>Galeri</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#tersimpan" data-tab="tersimpan" title="Tersimpan">
+                        <i class="fa-solid fa-bookmark nav-icon"></i>
+                        <span>Tersimpan</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#kontak" data-tab="kontak" title="Kontak">
+                        <i class="fa-solid fa-address-book nav-icon"></i>
+                        <span>Kontak</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+
+        <div class="sidebar-footer">
+            <div class="user-status-badge" id="userNavStatus" style="display: none;">
+                <span class="user-avatar"><i class="fa-solid fa-user-astronaut"></i></span>
+                <div class="user-info-mini">
+                    <span id="navUserName" class="user-name">Murid Demo</span>
+                    <span id="navUserRole" class="user-role-tag">Murid</span>
+                </div>
+                <button id="logoutBtn" class="btn-logout" title="Keluar dari Portal">
+                    <i class="fa-solid fa-right-from-bracket"></i>
+                </button>
+            </div>
+        </div>
+    </aside>
+
+    <!-- Overlay for Mobile Sidebar Drawer -->
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+    <!-- Main Content Wrapper -->
+    <main class="main-wrapper">
+
+        <!-- Main Hero / Login Dashboard Section (Centered Layout) -->
+        <section class="login-dashboard-section" id="beranda">
+            <div class="container">
+                <div class="login-dashboard-centered">
+
+                    <!-- Centered Header & Branding -->
+                    <div class="login-info-content-centered">
+                        <div class="hero-tag">
+                            <i class="fa-solid fa-shield-halved"></i> Portal Terpadu MAN ICT
+                        </div>
+                        <h1>Pusat Informasi & <span>Portal Digital</span></h1>
+                        <p class="subtitle-text">MAN Insan Cendekia Tanah Laut</p>
+                    </div>
+
+                    <!-- Centered Glassmorphic Login Dashboard Card -->
+                    <div class="login-card-wrapper-centered">
+                        <div class="glass-panel login-card">
+                            <div class="login-header">
+                                <div class="login-badge-icon">
+                                    <i class="fa-solid fa-lock"></i>
+                                </div>
+                                <h2>Dashboard Login</h2>
+                                <p>Pilih peran dan masukkan akses portal Anda</p>
+                            </div>
+
+                            <!-- Role Selector Tabs (3 Roles: Admin, Murid, GTK) -->
+                            <div class="role-selector" id="roleSelector">
+                                <button class="role-tab active" data-role="murid">
+                                    <i class="fa-solid fa-user-graduate"></i> Murid
+                                </button>
+                                <button class="role-tab" data-role="gtk">
+                                    <i class="fa-solid fa-chalkboard-user"></i> GTK
+                                </button>
+                                <button class="role-tab" data-role="admin">
+                                    <i class="fa-solid fa-user-shield"></i> Admin
+                                </button>
+                            </div>
+
+                            <!-- Alert Notification Box -->
+                            <div class="login-alert" id="loginAlert" style="display: none;"></div>
+
+                            <!-- Login Form -->
+                            <form id="loginForm" class="login-form">
+                                <input type="hidden" id="selectedRole" value="murid">
+
+                                <!-- Username Group (Visible for Admin, Hidden for Murid & GTK) -->
+                                <div class="form-group" id="usernameGroup" style="display: none;">
+                                    <label for="usernameInput" id="usernameLabel">Username Admin</label>
+                                    <div class="input-with-icon">
+                                        <i class="fa-solid fa-user-gear input-icon"></i>
+                                        <input type="text" id="usernameInput" placeholder="Masukkan Username Admin">
+                                    </div>
+                                </div>
+
+                                <!-- Password Group (Required for All Roles) -->
+                                <div class="form-group" id="passwordGroup">
+                                    <label for="passwordInput" id="passwordLabel">Kata Sandi Murid</label>
+                                    <div class="input-with-icon">
+                                        <i class="fa-solid fa-key input-icon"></i>
+                                        <input type="password" id="passwordInput"
+                                            placeholder="Masukkan Kata Sandi Murid" required>
+                                        <button type="button" class="toggle-password" id="togglePasswordBtn"
+                                            title="Tampilkan/Sembunyikan Password">
+                                            <i class="fa-regular fa-eye"></i>
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <div class="form-options">
+                                    <label class="remember-me">
+                                        <input type="checkbox" id="rememberMe" checked>
+                                        <span>Ingat Saya</span>
+                                    </label>
+                                    <a href="#kontak" class="forgot-link">Lupa Password?</a>
+                                </div>
+
+                                <button type="submit" class="btn btn-primary btn-login-submit" id="submitLoginBtn">
+                                    <span>Masuk Portal</span>
+                                    <i class="fa-solid fa-arrow-right-to-bracket"></i>
+                                </button>
+                            </form>
+
+                            <div class="divider">
+                                <span>atau</span>
+                            </div>
+
+                            <!-- Guest Mode Direct Access -->
+                            <a href="https://www.ictala.sch.id/" target="_blank" rel="noopener noreferrer" class="btn btn-outline btn-guest-access" id="guestAccessBtn">
+                                <i class="fa-solid fa-globe"></i> Akses Mode Tamu / Informasi Publik
+                            </a>
+
+                            <!-- Dynamic Demo Hint Box -->
+                            <div class="demo-hint-box" id="demoHintBox">
+                                <div class="hint-header">
+                                    <i class="fa-solid fa-lightbulb"></i> <strong>Akun Demo Uji Coba:</strong>
+                                </div>
+                                <p id="demoHintText"><strong>Kata Sandi Murid:</strong> <code>murid123</code></p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Centered Status Pills -->
+                    <div class="quick-status-pills centered-pills">
+                        <span class="pill"><i class="fa-solid fa-circle-check text-primary"></i> SNPDB 2026/2027
+                            Dibuka</span>
+                        <span class="pill"><i class="fa-solid fa-clock text-primary"></i> Sistem Aktif 24/7</span>
+                        <span class="pill"><i class="fa-solid fa-shield text-primary"></i> Akses Terenkripsi</span>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- Main Dashboard & Information Section (Revealed post-login or guest click) -->
+        <section class="dashboard container" id="pengumuman" style="display: none;">
+            <!-- Logged-in Welcome Banner -->
+            <div class="welcome-banner glass-panel" id="welcomeBanner" style="display: none;">
+                <div class="welcome-icon">
+                    <i class="fa-solid fa-circle-user"></i>
+                </div>
+                <div class="welcome-text">
+                    <h3>Selamat Datang Kembali, <span id="bannerUserName">Murid MAN IC</span>!</h3>
+                    <p>Anda saat ini terhubung di <strong>Portal MAN IC Tanah Laut</strong> sebagai <span
+                            id="bannerUserRole" class="badge-role">Murid</span>. Selamat beraktivitas!</p>
+                </div>
+            </div>
+
+            <!-- Admin Control Bar (Visible for Admin Only) -->
+            <div class="admin-control-bar glass-panel" id="adminControlBar" style="display: none;">
+                <div class="admin-control-text">
+                    <i class="fa-solid fa-user-gear text-primary"></i>
+                    <span><strong>Panel Administrator:</strong> Akses penuh pengelolaan informasi portal, menu taskbar, kartu konten, dan galeri foto.</span>
+                </div>
+                <div>
+                    <button type="button" class="btn btn-primary btn-sm" id="openUnifiedAdminModalBtn">
+                        <i class="fa-solid fa-sliders"></i> Pusat Pengelolaan Admin
+                    </button>
+                </div>
+            </div>
+
+            <!-- Central Search Bar (Search Bar di Tengah) -->
+            <div class="portal-center-search-section">
+                <div class="portal-search-bar-wrapper">
+                    <div class="search-bar-inner">
+                        <i class="fa-solid fa-magnifying-glass search-bar-icon"></i>
+                        <input type="text" id="portalSearchInput" placeholder="Cari pengumuman, materi pelajaran, jadwal, berkas, kegiatan..." autocomplete="off">
+                        <button type="button" id="clearSearchBtn" class="search-clear-btn" style="display: none;" title="Hapus Pencarian">&times;</button>
+                    </div>
+
+                    <!-- Floating Live Search Dropdown -->
+                    <div class="search-results-dropdown" id="searchResultsDropdown" style="display: none;">
+                        <div class="search-results-header">
+                            <span><i class="fa-solid fa-list-check text-primary"></i> Hasil Pencarian (<strong id="searchResultsCount">0</strong>)</span>
+                            <button type="button" class="btn-close-results" id="closeSearchResultsBtn" title="Tutup">&times;</button>
+                        </div>
+                        <div class="search-results-list" id="searchResultsList">
+                            <!-- Populated dynamically via JS -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quick Filter & Bookmark Access Pills -->
+                <div class="portal-search-shortcuts">
+                    <button type="button" class="search-shortcut-pill highlight-pill" id="quickOpenSavedBtn">
+                        <i class="fa-solid fa-bookmark text-primary"></i> Berkas & Catatan Tersimpan (<span id="quickSavedCountBadge">0</span>)
+                    </button>
+                    <span class="search-hint-text"><i class="fa-solid fa-lightbulb text-primary"></i> Ketik kata kunci untuk mencari informasi di semua tab</span>
+                </div>
+            </div>
+
+            <!-- TAB 1: PENGUMUMAN -->
+            <div class="tab-content active" id="tab-pengumuman">
+                <div class="section-header">
+                    <div class="section-title">
+                        <h2><i class="fa-solid fa-bullhorn text-primary"></i> Papan Pengumuman & Berita</h2>
+                        <p>Pengumuman resmi kampus, agenda penting, dan kabar terbaru MAN ICT.</p>
+                    </div>
+                    <div class="date-widget">
+                        <i class="fa-regular fa-calendar-check text-primary"></i>
+                        <span id="currentDate" class="text-primary font-weight-bold"></span>
+                    </div>
+                </div>
+
+                <div class="grid-dashboard">
+                    <!-- Main Card: Latest Announcement -->
+                    <div class="card glass-panel card-main">
+                        <div class="card-badge">RESMI</div>
+                        <div class="card-icon">
+                            <i class="fa-solid fa-bullhorn"></i>
+                        </div>
+                        <h3 id="displayPengumumanTitle">Pengumuman Utama</h3>
+                        <p id="displayPengumumanText">Pendaftaran Seleksi Nasional Peserta Didik Baru (SNPDB) MAN Insan Cendekia Tanah Laut Tahun
+                            Ajaran 2026/2027 telah dibuka secara online. Segera lengkapi berkas persyaratan dan
+                            verifikasi akun Anda sebelum batas waktu yang ditentukan.</p>
+                        <div style="margin-top: 15px;">
+                            <a href="#kontak" class="card-link nav-tab-link" data-tab="kontak">Baca Petunjuk SNPDB <i
+                                    class="fa-solid fa-arrow-right"></i></a>
+                        </div>
+                    </div>
+
+                    <!-- Agenda Terdekat -->
+                    <div class="card glass-panel card-side">
+                        <div class="card-icon">
+                            <i class="fa-regular fa-calendar-days"></i>
+                        </div>
+                        <h3>Agenda Terdekat</h3>
+                        <ul class="info-list" style="margin-top: 10px;">
+                            <li class="info-item">
+                                <div class="info-date">
+                                    <span class="day">15</span>
+                                    <span class="month">Agu</span>
+                                </div>
+                                <div class="info-content">
+                                    <h4 id="displayAgendaTitle">Upacara Kemerdekaan RI</h4>
+                                    <p id="displayAgendaLoc">Lapangan Utama Kampus MAN ICT</p>
+                                </div>
+                            </li>
+                            <li class="info-item">
+                                <div class="info-date">
+                                    <span class="day">20</span>
+                                    <span class="month">Agu</span>
+                                </div>
+                                <div class="info-content">
+                                    <h4>Ujian Tengah Semester</h4>
+                                    <p>Seluruh Kelas X, XI, XII</p>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <!-- Berita Kampus -->
+                    <div class="card glass-panel card-main">
+                        <div class="card-icon">
+                            <i class="fa-solid fa-newspaper"></i>
+                        </div>
+                        <h3>Berita Kampus Terbaru</h3>
+                        <ul class="info-list" style="margin-top: 10px;">
+                            <li class="info-item">
+                                <div class="info-content">
+                                    <h4 id="displayBeritaTitle">Tim Robotik MAN ICT Raih Emas Internasional</h4>
+                                    <p id="displayBeritaText" style="font-size: 0.88rem; margin-top: 5px; color: var(--text-secondary);">
+                                        Perwakilan murid MAN ICT sukses memboyong medali emas pada ajang World Robotics
+                                        Championship 2026.</p>
+                                    <p style="font-size: 0.8rem; margin-top: 5px; color: var(--primary-color);">2 hari
+                                        yang lalu</p>
+                                </div>
+                            </li>
+                            <li class="info-item">
+                                <div class="info-content">
+                                    <h4>Sosialisasi Beasiswa Perguruan Tinggi</h4>
+                                    <p style="font-size: 0.88rem; margin-top: 5px; color: var(--text-secondary);">
+                                        Pembekalan siswa kelas XII dalam menghadapi Seleksi Perguruan Tinggi Negeri
+                                        (SNBP/SNBT).</p>
+                                    <p style="font-size: 0.8rem; margin-top: 5px; color: var(--primary-color);">4 hari
+                                        yang lalu</p>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TAB 2: AKADEMIK -->
+            <div class="tab-content" id="tab-akademik" style="display: none;">
+                <div class="section-header">
+                    <div class="section-title">
+                        <h2><i class="fa-solid fa-graduation-cap text-primary"></i> Portal Akademik & Layanan</h2>
+                        <p>Akses e-learning, kalender akademik, direktori CBT, dan pusat unduhan berkas.</p>
+                    </div>
+                </div>
+
+                <div class="grid-dashboard">
+                    <!-- E-Learning Main Card -->
+                    <div class="card glass-panel card-main">
+                        <div class="card-icon">
+                            <i class="fa-solid fa-laptop-code"></i>
+                        </div>
+                        <h3>Sistem E-Learning & Portal Pembelajaran</h3>
+                        <p>Platform pembelajaran digital terintegrasi untuk akses materi, tugas harian, dan modul CBT
+                            ujian online murid MAN ICT.</p>
+                        <div style="margin-top: 15px; display: flex; gap: 10px; flex-wrap: wrap;">
+                            <button class="btn btn-primary btn-sm"><i class="fa-solid fa-right-to-bracket"></i> Masuk
+                                E-Learning</button>
+                            <button class="btn btn-outline btn-sm"><i class="fa-solid fa-calendar"></i> Jadwal
+                                Pelajaran</button>
+                        </div>
+                    </div>
+
+                    <!-- Layanan Cepat -->
+                    <div class="card glass-panel card-side">
+                        <div class="card-icon">
+                            <i class="fa-solid fa-grip"></i>
+                        </div>
+                        <h3>Layanan Akademik</h3>
+                        <ul class="info-list" style="margin-top: 10px;">
+                            <li class="info-item" style="align-items: center;">
+                                <i class="fa-solid fa-calendar-days text-primary"></i>
+                                <span class="info-content" style="font-weight: 500;">Kalender Akademik 2026</span>
+                            </li>
+                            <li class="info-item" style="align-items: center;">
+                                <i class="fa-solid fa-building-user text-primary"></i>
+                                <span class="info-content" style="font-weight: 500;">Sistem Pengawasan Asrama</span>
+                            </li>
+                            <li class="info-item" style="align-items: center;">
+                                <i class="fa-solid fa-award text-primary"></i>
+                                <span class="info-content" style="font-weight: 500;">Transkrip & Rapor Digital</span>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <!-- Pusat Unduhan -->
+                    <div class="card glass-panel card-main">
+                        <div class="card-icon">
+                            <i class="fa-solid fa-folder-arrow-down"></i>
+                        </div>
+                        <h3>Pusat Unduhan Berkas & Form Resmi</h3>
+                        <p>Unduh formulir perizinan asrama, surat rujukan, kalender akademik terbaru, dan panduan SNPDB.
+                        </p>
+                        <div style="margin-top: 15px;">
+                            <button class="btn btn-outline" style="font-size: 0.9rem;">
+                                <i class="fa-solid fa-folder-open"></i> Buka Direktori Unduhan
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TAB 3: GALERI -->
+            <div class="tab-content" id="tab-galeri" style="display: none;">
+                <div class="section-header">
+                    <div class="section-title">
+                        <h2><i class="fa-solid fa-images text-primary"></i> Galeri Prestasi & Dokumentasi</h2>
+                        <p>Dokumentasi kegiatan siswa, prestasi nasional & internasional, serta momen kehidupan kampus.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="grid-dashboard" id="galleryGrid">
+                    <!-- Populated dynamically via JS with default & admin added items -->
+                </div>
+            </div>
+
+            <!-- TAB 4: KONTAK -->
+            <div class="tab-content" id="tab-kontak" style="display: none;">
+                <div class="section-header">
+                    <div class="section-title">
+                        <h2><i class="fa-solid fa-address-book text-primary"></i> Hubungi Kami & Informasi Lokasi</h2>
+                        <p>Alamat kampus, saluran komunikasi resmi, serta layanan bantuan informasi.</p>
+                    </div>
+                </div>
+
+                <div class="grid-dashboard">
+                    <div class="card glass-panel card-main">
+                        <div class="card-icon">
+                            <i class="fa-solid fa-map-location-dot"></i>
+                        </div>
+                        <h3>Lokasi & Alamat Kampus</h3>
+                        <p><strong style="color: var(--primary-color);">MAN Insan Cendekia Tanah Laut</strong><br>Jl.
+                            Trans Kalimantan, Kab. Tanah Laut, Kalimantan Selatan, Indonesia.</p>
+                        <div style="margin-top: 15px; display: flex; flex-direction: column; gap: 8px;">
+                            <p><i class="fa-solid fa-envelope text-primary"></i> Email: <span id="displayEmail">info@ictanahlaut.sch.id</span></p>
+                            <p><i class="fa-solid fa-phone text-primary"></i> Telepon: <span id="displayPhone">+62 512 3456 789</span></p>
+                        </div>
+                    </div>
+
+                    <div class="card glass-panel card-side">
+                        <div class="card-icon">
+                            <i class="fa-solid fa-share-nodes"></i>
+                        </div>
+                        <h3>Media Sosial Resmi</h3>
+                        <ul class="info-list" style="margin-top: 10px;">
+                            <li class="info-item"><i class="fa-brands fa-instagram text-primary"></i> @manic_tanahlaut
+                            </li>
+                            <li class="info-item"><i class="fa-brands fa-youtube text-primary"></i> Official MAN ICT
+                            </li>
+                            <li class="info-item"><i class="fa-brands fa-facebook-f text-primary"></i> MAN Insan
+                                Cendekia Tala</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TAB 5: TERSIMPAN (Khusus Murid & Pengguna untuk Simpan Berkas & Catatan) -->
+            <div class="tab-content" id="tab-tersimpan" style="display: none;">
+                <div class="section-header">
+                    <div class="section-title">
+                        <h2><i class="fa-solid fa-bookmark text-primary"></i> Berkas & Informasi Tersimpan</h2>
+                        <p>Kumpulan pengumuman, materi, berkas, dan catatan penting yang Anda simpan agar tidak hilang.</p>
+                    </div>
+                    <div class="saved-actions-header">
+                        <button type="button" class="btn btn-outline btn-sm" id="btnExportNotes">
+                            <i class="fa-solid fa-download"></i> Cadangkan Catatan (.txt)
+                        </button>
+                    </div>
+                </div>
+
+                <div class="grid-dashboard">
+                    <!-- Column 1: Daftar Informasi / Kartu yang Di-bookmark -->
+                    <div class="card glass-panel card-main">
+                        <div class="card-icon"><i class="fa-solid fa-folder-bookmark"></i></div>
+                        <h3>Informasi & Materi yang Di-bookmark</h3>
+                        <p>Klik tombol bookmark <i class="fa-regular fa-bookmark text-primary"></i> di pojok kanan atas kartu informasi manapun di portal untuk menyimpannya di sini.</p>
+                        
+                        <div id="savedCardsListContainer" class="saved-cards-list-container">
+                            <!-- Populated dynamically via JS -->
+                        </div>
+                    </div>
+
+                    <!-- Column 2: Buku Catatan Murid (Agar tidak hilang) -->
+                    <div class="card glass-panel card-side">
+                        <div class="card-icon"><i class="fa-solid fa-pen-to-square"></i></div>
+                        <h3>Buku Catatan Murid</h3>
+                        <p>Simpan catatan tugas harian, rangkuman materi, atau pengingat penting Anda di sini.</p>
+
+                        <form id="studentNoteForm" class="student-note-form">
+                            <input type="hidden" id="studentNoteEditId">
+                            <div class="admin-form-group">
+                                <label>Judul Catatan</label>
+                                <input type="text" id="noteTitleInput" class="admin-input" placeholder="contoh: Tugas Fisika Bab 3" required>
+                            </div>
+                            <div class="admin-form-group">
+                                <label>Isi Catatan</label>
+                                <textarea id="noteContentInput" class="admin-input" rows="3" placeholder="Tuliskan catatan penting Anda..." required></textarea>
+                            </div>
+                            <div class="admin-form-group">
+                                <label>Kategori Label</label>
+                                <select id="notePrioritySelect" class="admin-input">
+                                    <option value="Tugas">📝 Tugas Sekolah</option>
+                                    <option value="Penting">⭐ Sangat Penting</option>
+                                    <option value="Ujian">🎯 Persiapan Ujian</option>
+                                    <option value="Asrama">🏠 Kegiatan Asrama</option>
+                                    <option value="Umum">📌 Catatan Umum</option>
+                                </select>
+                            </div>
+                            <div style="display: flex; gap: 8px; margin-top: 8px;">
+                                <button type="submit" class="btn btn-primary btn-sm" id="btnSaveStudentNote">
+                                    <i class="fa-solid fa-floppy-disk"></i> Simpan Catatan
+                                </button>
+                                <button type="button" class="btn btn-outline btn-sm" id="btnResetStudentNote" style="display: none;">
+                                    Batal
+                                </button>
+                            </div>
+                        </form>
+
+                        <hr style="border: 0; border-top: 1px solid rgba(10, 88, 202, 0.12); margin: 18px 0;">
+
+                        <div class="student-notes-header">
+                            <h4 style="font-size: 1rem; margin-bottom: 10px;">
+                                <i class="fa-solid fa-clipboard-list text-primary"></i> Catatan Aktif (<span id="notesCountBadge">0</span>)
+                            </h4>
+                        </div>
+                        <div id="studentNotesList" class="student-notes-list">
+                            <!-- Populated dynamically via JS -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Shared Footer -->
+        <footer id="kontak-footer" style="display: none;">
+            <div class="container">
+                <div class="footer-content">
+                    <div class="footer-col">
+                        <h3><i class="fa-solid fa-graduation-cap"></i> MAN Insan Cendekia Tanah Laut</h3>
+                        <p>Kampus Islami unggulan yang mencetak generasi pemimpin masa depan yang beriman, bertaqwa, dan
+                            berwawasan global.</p>
+                    </div>
+                    <div class="footer-col">
+                        <h3>Kontak Kami</h3>
+                        <p><i class="fa-solid fa-map-location-dot text-primary"></i> Jl. Trans Kalimantan, Kab. Tanah
+                            Laut, Kalimantan Selatan</p>
+                        <p><i class="fa-solid fa-envelope text-primary"></i> info@ictanahlaut.sch.id</p>
+                        <p><i class="fa-solid fa-phone text-primary"></i> +62 512 3456 789</p>
+                    </div>
+                    <div class="footer-col">
+                        <h3>Media Sosial</h3>
+                        <div class="social-links">
+                            <a href="#" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
+                            <a href="#" aria-label="YouTube"><i class="fa-brands fa-youtube"></i></a>
+                            <a href="#" aria-label="Facebook"><i class="fa-brands fa-facebook-f"></i></a>
+                            <a href="#" aria-label="Twitter"><i class="fa-brands fa-twitter"></i></a>
+                        </div>
+                    </div>
+                </div>
+                <div class="footer-bottom">
+                    <p>&copy; 2026 MAN Insan Cendekia Tanah Laut. Hak Cipta Dilindungi.</p>
+                </div>
+            </div>
+        </footer>
+
+    </main>
+
+    <!-- Unified Admin Control Center Modal (Satu Pusat Pengelolaan Admin Terpadu) -->
+    <div class="admin-modal-overlay" id="unifiedAdminModal" style="display: none;">
+        <div class="admin-modal-card glass-panel" style="max-width: 820px;">
+            <div class="admin-modal-header">
+                <div class="admin-modal-header-info">
+                    <h3><i class="fa-solid fa-shield-halved text-primary"></i> Pusat Pengelolaan Administrator</h3>
+                    <p style="font-size: 0.82rem; color: var(--text-secondary); margin: 0;">Kelola semua data portal, navigasi, isi konten, dan galeri dalam satu panel terpadu.</p>
+                </div>
+                <button type="button" class="admin-modal-close" id="closeUnifiedAdminModalBtn" title="Tutup">&times;</button>
+            </div>
+
+            <!-- Main Admin Panel Tabs -->
+            <div class="admin-panel-tabs">
+                <button type="button" class="admin-panel-tab active" data-admin-panel="info">
+                    <i class="fa-solid fa-pen-to-square"></i> Informasi Portal
+                </button>
+                <button type="button" class="admin-panel-tab" data-admin-panel="taskbar">
+                    <i class="fa-solid fa-bars-staggered"></i> Menu Taskbar
+                </button>
+                <button type="button" class="admin-panel-tab" data-admin-panel="cards">
+                    <i class="fa-solid fa-layer-group"></i> Kartu & Konten Tab
+                </button>
+                <button type="button" class="admin-panel-tab" data-admin-panel="gallery">
+                    <i class="fa-solid fa-images"></i> Galeri Foto
+                </button>
+            </div>
+
+            <!-- PANEL 1: INFORMASI PORTAL (Pengumuman, Berita, Agenda, Kontak) -->
+            <div class="admin-panel-content active" id="admin-panel-info">
+                <!-- Section Sub-Pills -->
+                <div class="admin-edit-tabs" style="padding: 0 0 12px 0; background: transparent; border-bottom: 1px solid rgba(10,88,202,0.1);">
+                    <button type="button" class="admin-edit-tab active" data-section="pengumuman">
+                        <i class="fa-solid fa-bullhorn"></i> Pengumuman
+                    </button>
+                    <button type="button" class="admin-edit-tab" data-section="berita">
+                        <i class="fa-solid fa-newspaper"></i> Berita
+                    </button>
+                    <button type="button" class="admin-edit-tab" data-section="agenda">
+                        <i class="fa-solid fa-calendar-days"></i> Agenda
+                    </button>
+                    <button type="button" class="admin-edit-tab" data-section="kontak">
+                        <i class="fa-solid fa-address-book"></i> Kontak
+                    </button>
+                </div>
+
+                <form id="adminEditForm" style="display: flex; flex-direction: column; gap: 14px;">
+                    <!-- Section: Pengumuman -->
+                    <div class="admin-edit-section active" id="admin-section-pengumuman">
+                        <p class="admin-section-desc"><i class="fa-solid fa-circle-info text-primary"></i> Edit judul dan isi pengumuman utama di tab Pengumuman.</p>
+                        <div class="admin-form-group">
+                            <label><i class="fa-solid fa-bullhorn text-primary"></i> Judul Pengumuman Utama</label>
+                            <input type="text" id="editPengumumanTitle" class="admin-input" required>
+                        </div>
+                        <div class="admin-form-group">
+                            <label>Isi Pengumuman Utama</label>
+                            <textarea id="editPengumumanText" class="admin-input" rows="4" required></textarea>
+                        </div>
+                    </div>
+
+                    <!-- Section: Berita -->
+                    <div class="admin-edit-section" id="admin-section-berita" style="display:none;">
+                        <p class="admin-section-desc"><i class="fa-solid fa-circle-info text-primary"></i> Edit berita kampus terbaru di tab Pengumuman.</p>
+                        <div class="admin-form-group">
+                            <label><i class="fa-solid fa-newspaper text-primary"></i> Judul Berita Utama</label>
+                            <input type="text" id="editBeritaTitle" class="admin-input" required>
+                        </div>
+                        <div class="admin-form-group">
+                            <label>Ringkasan Berita Utama</label>
+                            <textarea id="editBeritaText" class="admin-input" rows="4" required></textarea>
+                        </div>
+                    </div>
+
+                    <!-- Section: Agenda -->
+                    <div class="admin-edit-section" id="admin-section-agenda" style="display:none;">
+                        <p class="admin-section-desc"><i class="fa-solid fa-circle-info text-primary"></i> Edit agenda/kegiatan terdekat di tab Pengumuman.</p>
+                        <div class="admin-form-group">
+                            <label><i class="fa-solid fa-calendar-days text-primary"></i> Judul Agenda Terdekat</label>
+                            <input type="text" id="editAgendaTitle" class="admin-input" required>
+                        </div>
+                        <div class="admin-form-group">
+                            <label>Lokasi / Keterangan Agenda</label>
+                            <input type="text" id="editAgendaLoc" class="admin-input" required>
+                        </div>
+                    </div>
+
+                    <!-- Section: Kontak -->
+                    <div class="admin-edit-section" id="admin-section-kontak" style="display:none;">
+                        <p class="admin-section-desc"><i class="fa-solid fa-circle-info text-primary"></i> Edit informasi kontak resmi di tab Kontak.</p>
+                        <div class="admin-form-group">
+                            <label><i class="fa-solid fa-envelope text-primary"></i> Email Resmi Kontak</label>
+                            <input type="email" id="editEmail" class="admin-input" required>
+                        </div>
+                        <div class="admin-form-group">
+                            <label><i class="fa-solid fa-phone text-primary"></i> Nomor Telepon Kontak</label>
+                            <input type="text" id="editPhone" class="admin-input" required>
+                        </div>
+                    </div>
+
+                    <div style="display: flex; justify-content: flex-end; margin-top: 6px;">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fa-solid fa-floppy-disk"></i> Simpan Informasi Portal
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- PANEL 2: KELOLA TASKBAR & MENU -->
+            <div class="admin-panel-content" id="admin-panel-taskbar" style="display: none;">
+                <p class="admin-section-desc"><i class="fa-solid fa-circle-info text-primary"></i> Kelola menu yang tampil di navigasi taskbar sidebar kiri.</p>
+                <div class="admin-form-group">
+                    <label><strong>Daftar Menu Taskbar:</strong></label>
+                    <div id="adminTaskbarList" class="taskbar-items-list"></div>
+                </div>
+
+                <hr style="border: 0; border-top: 1px solid rgba(10, 88, 202, 0.12); margin: 10px 0;">
+
+                <form id="adminTaskbarItemForm">
+                    <h4 id="taskbarFormTitle" style="margin-bottom: 12px; font-size: 1rem;">
+                        <i class="fa-solid fa-plus-circle text-primary"></i> Tambah Menu Baru ke Taskbar
+                    </h4>
+                    <input type="hidden" id="taskbarItemId">
+
+                    <div class="admin-form-group">
+                        <label>Nama Menu Taskbar</label>
+                        <input type="text" id="taskbarItemTitle" class="admin-input" placeholder="contoh: Perpustakaan / Jadwal / Asrama" required>
+                    </div>
+
+                    <div class="admin-form-group">
+                        <label>Ikon FontAwesome</label>
+                        <select id="taskbarItemIconSelect" class="admin-input">
+                            <option value="fa-solid fa-book-open">📚 fa-book-open (Perpustakaan)</option>
+                            <option value="fa-solid fa-calendar-days">📅 fa-calendar-days (Jadwal/Agenda)</option>
+                            <option value="fa-solid fa-house-user">🏠 fa-house-user (Asrama/Fasilitas)</option>
+                            <option value="fa-solid fa-trophy">🏆 fa-trophy (Prestasi/Kompetisi)</option>
+                            <option value="fa-solid fa-utensils">🍽️ fa-utensils (Kantin/Menu)</option>
+                            <option value="fa-solid fa-users-gear">👥 fa-users-gear (Organisasi/OSIS)</option>
+                            <option value="fa-solid fa-landmark">🏛️ fa-landmark (Profil Kampus)</option>
+                            <option value="fa-solid fa-laptop-code">💻 fa-laptop-code (Lab Komputer)</option>
+                            <option value="fa-solid fa-star">⭐ fa-star (Bintang/Unggulan)</option>
+                        </select>
+                    </div>
+
+                    <div class="admin-form-group">
+                        <label>Judul Halaman Konten</label>
+                        <input type="text" id="taskbarHeaderTitle" class="admin-input" placeholder="contoh: Portal Perpustakaan Digital & E-Book" required>
+                    </div>
+
+                    <div class="admin-form-group">
+                        <label>Deskripsi Halaman</label>
+                        <textarea id="taskbarContentText" class="admin-input" rows="3" placeholder="Masukkan ringkasan atau informasi..." required></textarea>
+                    </div>
+
+                    <div style="display: flex; gap: 10px; margin-top: 10px;">
+                        <button type="submit" class="btn btn-primary" id="saveTaskbarItemBtn">
+                            <i class="fa-solid fa-plus"></i> Simpan ke Taskbar
+                        </button>
+                        <button type="button" class="btn btn-outline" id="resetTaskbarFormBtn" style="display: none;">Batal Edit</button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- PANEL 3: KELOLA KARTU KONTEN PER TAB -->
+            <div class="admin-panel-content" id="admin-panel-cards" style="display: none;">
+                <p class="admin-section-desc"><i class="fa-solid fa-circle-info text-primary"></i> Tambah atau edit kartu informasi di dalam tab yang Anda pilih.</p>
+                
+                <div class="admin-form-group">
+                    <label><i class="fa-solid fa-filter text-primary"></i> <strong>Pilih Tab Sasaran:</strong></label>
+                    <select id="adminCardTargetTabSelect" class="admin-input">
+                        <!-- Populated dynamically via JS -->
+                    </select>
+                </div>
+
+                <div class="admin-form-group">
+                    <label><strong>Daftar Kartu di Tab Ini:</strong></label>
+                    <div id="tabContentCardsList" class="taskbar-items-list"></div>
+                </div>
+
+                <hr style="border: 0; border-top: 1px solid rgba(10, 88, 202, 0.12); margin: 10px 0;">
+
+                <form id="tabContentCardForm">
+                    <h4 id="tabCardFormTitle" style="margin-bottom: 12px; font-size: 1rem;">
+                        <i class="fa-solid fa-plus-circle text-primary"></i> Tambah Kartu Informasi Baru
+                    </h4>
+                    <input type="hidden" id="tabCardEditId">
+
+                    <div class="admin-form-group">
+                        <label>Judul Kartu</label>
+                        <input type="text" id="tabCardTitle" class="admin-input" placeholder="contoh: Jadwal Peminjaman Buku" required>
+                    </div>
+                    <div class="admin-form-group">
+                        <label>Isi / Deskripsi Kartu</label>
+                        <textarea id="tabCardBody" class="admin-input" rows="3" placeholder="Masukkan informasi detail..." required></textarea>
+                    </div>
+                    <div class="admin-form-group">
+                        <label><i class="fa-solid fa-image text-primary"></i> Unggah Gambar Kartu (Opsional)</label>
+                        <div class="image-input-choice">
+                            <input type="file" id="tabCardImageFile" class="admin-input" accept="image/*" style="padding: 6px 10px;">
+                            <div style="text-align: center; font-size: 0.8rem; color: var(--text-secondary); margin: 3px 0;">— atau masukkan URL gambar web —</div>
+                            <input type="url" id="tabCardImageUrl" class="admin-input" placeholder="https://example.com/foto.jpg">
+                        </div>
+                        <input type="hidden" id="tabCardImageData">
+                        <div id="tabCardImagePreview" class="image-preview-container" style="display: none;">
+                            <img src="" alt="Preview Gambar">
+                            <button type="button" class="btn-remove-preview" id="btnRemoveTabCardImage" title="Hapus gambar">&times;</button>
+                        </div>
+                    </div>
+
+                    <div class="admin-form-group">
+                        <label>Ikon Kartu</label>
+                        <select id="tabCardIcon" class="admin-input">
+                            <option value="fa-solid fa-circle-info">ℹ️ Informasi Umum</option>
+                            <option value="fa-solid fa-bullhorn">📢 Pengumuman</option>
+                            <option value="fa-solid fa-calendar-days">📅 Jadwal/Agenda</option>
+                            <option value="fa-solid fa-book-open">📚 Buku/Materi</option>
+                            <option value="fa-solid fa-trophy">🏆 Prestasi</option>
+                            <option value="fa-solid fa-house-user">🏠 Fasilitas/Asrama</option>
+                            <option value="fa-solid fa-utensils">🍽️ Kantin/Konsumsi</option>
+                            <option value="fa-solid fa-users-gear">👥 Organisasi</option>
+                            <option value="fa-solid fa-star">⭐ Unggulan</option>
+                            <option value="fa-solid fa-file-lines">📄 Dokumen/Form</option>
+                        </select>
+                    </div>
+
+                    <div style="display: flex; gap: 10px; margin-top: 10px;">
+                        <button type="submit" class="btn btn-primary" id="saveTabCardBtn">
+                            <i class="fa-solid fa-plus"></i> Tambahkan Kartu
+                        </button>
+                        <button type="button" class="btn btn-outline" id="resetTabCardFormBtn" style="display: none;">Batal Edit</button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- PANEL 4: GALERI FOTO -->
+            <div class="admin-panel-content" id="admin-panel-gallery" style="display: none;">
+                <p class="admin-section-desc"><i class="fa-solid fa-circle-info text-primary"></i> Kelola dokumentasi foto yang tampil pada tab Galeri.</p>
+                <div class="admin-form-group">
+                    <label><strong>Daftar Foto Galeri Saat Ini:</strong></label>
+                    <div id="adminGalleryList" class="taskbar-items-list"></div>
+                </div>
+
+                <hr style="border: 0; border-top: 1px solid rgba(10, 88, 202, 0.12); margin: 10px 0;">
+
+                <form id="adminGalleryItemForm">
+                    <h4 id="galleryFormTitle" style="margin-bottom: 12px; font-size: 1rem;">
+                        <i class="fa-solid fa-plus-circle text-primary"></i> Tambah Foto Baru ke Galeri
+                    </h4>
+                    <input type="hidden" id="galleryItemId">
+
+                    <div class="admin-form-group">
+                        <label>Judul Dokumentasi / Kegiatan</label>
+                        <input type="text" id="galleryItemTitle" class="admin-input" placeholder="contoh: Juara 1 Robotika Nasional 2026" required>
+                    </div>
+
+                    <div class="admin-form-group">
+                        <label>Deskripsi Singkat</label>
+                        <textarea id="galleryItemDesc" class="admin-input" rows="2" placeholder="Tuliskan keterangan kegiatan..." required></textarea>
+                    </div>
+
+                    <div class="admin-form-group">
+                        <label>Kategori / Tag</label>
+                        <input type="text" id="galleryItemBadge" class="admin-input" placeholder="contoh: Prestasi, Asrama, Laboratorium">
+                    </div>
+
+                    <div class="admin-form-group">
+                        <label><i class="fa-solid fa-image text-primary"></i> Unggah / Masukkan Gambar</label>
+                        <div class="image-input-choice">
+                            <input type="file" id="galleryItemImageFile" class="admin-input" accept="image/*" style="padding: 6px 10px;">
+                            <div style="text-align: center; font-size: 0.8rem; color: var(--text-secondary); margin: 3px 0;">— atau masukkan URL gambar web —</div>
+                            <input type="url" id="galleryItemImageUrl" class="admin-input" placeholder="https://images.unsplash.com/... atau link gambar">
+                        </div>
+                        <input type="hidden" id="galleryItemImageData">
+                        <div id="galleryItemImagePreview" class="image-preview-container" style="display: none;">
+                            <img src="" alt="Preview Foto Galeri">
+                            <button type="button" class="btn-remove-preview" id="btnRemoveGalleryImage" title="Hapus foto">&times;</button>
+                        </div>
+                    </div>
+
+                    <div style="display: flex; gap: 10px; margin-top: 10px;">
+                        <button type="submit" class="btn btn-primary" id="saveGalleryItemBtn">
+                            <i class="fa-solid fa-plus"></i> Simpan Foto ke Galeri
+                        </button>
+                        <button type="button" class="btn btn-outline" id="resetGalleryFormBtn" style="display: none;">Batal Edit</button>
+                    </div>
+                </form>
+            </div>
+
+            <div class="admin-modal-footer">
+                <button type="button" class="btn btn-outline" id="cancelUnifiedAdminModalBtn">Tutup</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Image Lightbox Modal for Full View -->
+    <div class="lightbox-modal-overlay" id="imageLightboxModal" style="display: none;">
+        <div class="lightbox-content">
+            <button class="lightbox-close" id="closeLightboxBtn">&times;</button>
+            <img id="lightboxImage" src="" alt="Tampilan Penuh Foto">
+            <div class="lightbox-caption">
+                <h4 id="lightboxTitle"></h4>
+                <p id="lightboxDesc"></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Custom Scripts -->
+    <script src="script.js"></script>
+</body>
+
+</html>
